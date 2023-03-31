@@ -18,7 +18,8 @@ Feature: taller de mystoreapi.com
     * def dataGenerator = Java.type('helpers.DataGenerator')
     * def quantity = dataGenerator.getRandomQuantity()
 
-  Scenario: 3. Verificar la orden
+  Scenario:
+    # 3. Verificar la orden
     Given path order + '/' + orderId
     When method GET
     Then status 200
@@ -70,6 +71,3 @@ Feature: taller de mystoreapi.com
     * def message = 'Order with id ' + orderId + ' not found'
     * print message
     * match response == {"statusCode":404,"message": "#(message)"}
-
-
-
