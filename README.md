@@ -1,6 +1,6 @@
 # MyStoreAPI Test Plan
 
-This document outlines the steps required to test the [MyStoreAPI](https://mystoreapi.com/).
+This document outlines the steps required to test some services in [MyStoreAPI](https://mystoreapi.com/).
 
 ## API Endpoints
 
