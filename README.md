@@ -35,7 +35,7 @@ The following API endpoints will be tested:
         - Postman: `status` and `price`.
         - Karate: the whole body with fuzzy matching.
 
-3. Use `GET` ` /order/{id}` to verify the order previously created:
+3. Use `GET` `/order/{id}` to verify the order previously created:
     - Compare the `customer` value in the response body with the one created previously.
     - Validate the response code.
 
