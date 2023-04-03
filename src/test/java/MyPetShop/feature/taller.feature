@@ -1,6 +1,6 @@
 Feature: taller de mystoreapi.com
 
-  Background: valores aleatorios
+  Background: valores aleatorios y de entorno
     Given url URL
 
     # Crear orden
@@ -20,54 +20,53 @@ Feature: taller de mystoreapi.com
 
   Scenario:
     # 3. Verificar la orden
-    Given path order + '/' + orderId
-    When method GET
-    Then status 200
-    * match response.order.customer == customer
+    * def getOrder = call read('classpath:helpers/getOrder.feature')
+    * def orderResponse = getOrder.orderResponse
+
+    * match orderResponse.order.customer == customer
+    * match getOrder.getStatus == 200
 
     # 4. Añadir el producto a la orden
-    Given path order + '/' + orderId + '/product'
-    And request
-    """
-      {
-        "productId": "#(productId)",
-        "amount": #(quantity)
-      }
-    """
-    When method POST
-    Then status 201
+    * def addProduct = call read('classpath:helpers/addProduct.feature'){"productId": "#(productId)", "amount": #(quantity)}
 
     # 5. Verificar la adición del producto a la orden
-    Given path order + '/' + orderId
-    When method GET
-    Then status 200
-    * match response.order.customer == customer
-    * match response.items[0].name == productName
+    * def getOrder = call read('classpath:helpers/getOrder.feature')
+    * def orderResponse = getOrder.orderResponse
+
+    * match getOrder.getStatus == 200
+    * match orderResponse.order.customer == customer
+    * match orderResponse.items[0].name == productName
     * def totalCost = quantity * productPrice
-    * match response.summary.totalCost == totalCost
+    * match orderResponse.summary.totalCost == totalCost
 
     # 6. Eliminar el producto de la orden
-    Given path order + '/' + orderId + '/product/' + productId
-    When method DELETE
-    Then status 200
+#    Given path order + '/' + orderId + '/product/' + productId
+#    When method DELETE
+#    Then status 200
+    * def deleteOrder = call read('classpath:helpers/deleteProduct.feature')
 
     # 7. Corroborar que no hayan productos en la orden
-    Given path order + '/' + orderId
-    When method GET
-    Then status 200
-    * match response.order.customer == customer
-    * match response.items == '#[0]'
+    * def getOrder = call read('classpath:helpers/getOrder.feature')
+    * def orderResponse = getOrder.orderResponse
+
+    * match getOrder.getStatus == 200
+    * match orderResponse.order.customer == customer
+    * match orderResponse.items == '#[0]'
 
     # 8. Eliminar la orden y corroborar el mensaje de estado
-    Given path order + '/' + orderId
-    When method DELETE
-    Then status 200
-    * match response.status == 'deleted'
+    * def deleteOrder = call read('classpath:helpers/deleteOrder.feature')
+    * def deleteResponse = deleteOrder.deleteResponse
+#    Given path order + '/' + orderId
+#    When method DELETE
+#    Then status 200
+
+    * match deleteResponse.status == 'deleted'
 
     # 9. Corroborar el estado de la respuesta y el mensaje
-    Given path order + '/' + orderId
-    When method GET
-    Then status 404
+    * def getOrder = call read('classpath:helpers/getOrder.feature')
+    * def orderResponse = getOrder.orderResponse
+
+    * match getOrder.getStatus == 404
     * def message = 'Order with id ' + orderId + ' not found'
     * print message
-    * match response == {"statusCode":404,"message": "#(message)"}
+    * match orderResponse == {"statusCode":404,"message": "#(message)"}
