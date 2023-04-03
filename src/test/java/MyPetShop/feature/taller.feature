@@ -40,9 +40,6 @@ Feature: taller de mystoreapi.com
     * match orderResponse.summary.totalCost == totalCost
 
     # 6. Eliminar el producto de la orden
-#    Given path order + '/' + orderId + '/product/' + productId
-#    When method DELETE
-#    Then status 200
     * def deleteOrder = call read('classpath:helpers/deleteProduct.feature')
 
     # 7. Corroborar que no hayan productos en la orden
@@ -56,9 +53,6 @@ Feature: taller de mystoreapi.com
     # 8. Eliminar la orden y corroborar el mensaje de estado
     * def deleteOrder = call read('classpath:helpers/deleteOrder.feature')
     * def deleteResponse = deleteOrder.deleteResponse
-#    Given path order + '/' + orderId
-#    When method DELETE
-#    Then status 200
 
     * match deleteResponse.status == 'deleted'
 
