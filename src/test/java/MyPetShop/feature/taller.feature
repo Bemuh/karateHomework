@@ -27,7 +27,7 @@ Feature: taller de mystoreapi.com
     * match getOrder.getStatus == 200
 
     # 4. Añadir el producto a la orden
-    * def addProduct = call read('classpath:helpers/addProduct.feature'){"productId": "#(productId)", "amount": #(quantity)}
+    * def addProduct = call read('classpath:helpers/addProduct.feature')
 
     # 5. Verificar la adición del producto a la orden
     * def getOrder = call read('classpath:helpers/getOrder.feature')
