@@ -25,9 +25,9 @@ public class DataGenerator {
 
     }
 
-    public static double getRandomValue() {
+    public static Double getRandomValue() {
         Faker faker = new Faker();
-        double price = faker.number().randomDouble(2, 0, 999);
+        Double price = faker.number().randomDouble(2, 0, 999);
         return price;
 
     }
