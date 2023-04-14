@@ -1,35 +1,43 @@
-Feature: taller de mystoreapi.com
+Feature: mystoreapi.com homework
 
-  Background: valores aleatorios y de entorno
+  Background: random values and "global" variables
     Given url URL
 
-    # Crear orden
-    * def newOrder = callonce read('classpath:helpers/newOrder.feature')
+      # Data generators
+    * def dataGenerator = Java.type('helpers.DataGenerator')
+    * def quantity = dataGenerator.getRandomQuantity()
+
+    * def product = dataGenerator.getRandomProduct()
+    * def price = dataGenerator.getRandomValue()
+    * def manufacturer = dataGenerator.getRandomManufacturer()
+    * def category = dataGenerator.getRandomCategory()
+    * def description = dataGenerator.getRandomDescription()
+    * def tag = dataGenerator.getRandomTags()
+
+  Scenario: Main
+
+    # 1. Create a new order:
+    * def newOrder = call read('classpath:helpers/newOrder.feature')
     * def orderId = newOrder.orderId
     * def customer = newOrder.customer
 
-    # Crear producto
-    * def product = callonce read('classpath:helpers/newProduct.feature')
+    # 2. Create a new product
+    * def product = call read('classpath:helpers/newProduct.feature')
     * def productId = product.productId
     * def productName = product.productName
     * def productPrice = product.productPrice
 
-    # Variables aleatorias
-    * def dataGenerator = Java.type('helpers.DataGenerator')
-    * def quantity = dataGenerator.getRandomQuantity()
-
-  Scenario:
-    # 3. Verificar la orden
+    # 3. Verify the order previously created:
     * def getOrder = call read('classpath:helpers/getOrder.feature')
     * def orderResponse = getOrder.orderResponse
 
     * match orderResponse.order.customer == customer
     * match getOrder.getStatus == 200
 
-    # 4. Añadir el producto a la orden
+    # 4. Add the product to the order
     * def addProduct = call read('classpath:helpers/addProduct.feature')
 
-    # 5. Verificar la adición del producto a la orden
+    # 5. Verify the previously created order and its added product:
     * def getOrder = call read('classpath:helpers/getOrder.feature')
     * def orderResponse = getOrder.orderResponse
 
@@ -39,10 +47,10 @@ Feature: taller de mystoreapi.com
     * def totalCost = quantity * productPrice
     * match orderResponse.summary.totalCost == totalCost
 
-    # 6. Eliminar el producto de la orden
+    # 6. Remove the product from the order
     * def deleteOrder = call read('classpath:helpers/deleteProduct.feature')
 
-    # 7. Corroborar que no hayan productos en la orden
+    # 7. Verify that there are no products in the order
     * def getOrder = call read('classpath:helpers/getOrder.feature')
     * def orderResponse = getOrder.orderResponse
 
@@ -50,17 +58,38 @@ Feature: taller de mystoreapi.com
     * match orderResponse.order.customer == customer
     * match orderResponse.items == '#[0]'
 
-    # 8. Eliminar la orden y corroborar el mensaje de estado
+    # 8. Delete the order and verify the status message
     * def deleteOrder = call read('classpath:helpers/deleteOrder.feature')
     * def deleteResponse = deleteOrder.deleteResponse
 
     * match deleteResponse.status == 'deleted'
 
-    # 9. Corroborar el estado de la respuesta y el mensaje
+    # 9. Verify the server response status and the response message
     * def getOrder = call read('classpath:helpers/getOrder.feature')
     * def orderResponse = getOrder.orderResponse
 
     * match getOrder.getStatus == 404
     * def message = 'Order with id ' + orderId + ' not found'
-    * print message
     * match orderResponse == {"statusCode":404,"message": "#(message)"}
+
+  Scenario Outline: <caso> <campo> <nombre>
+
+    Given path '/catalog/product'
+    And request
+    """
+    {
+      "name": <name>,
+      "price": <price>,
+      "manufacturer": "#(manufacturer)",
+      "category": "#(category)",
+      "description": "#(description)",
+      "tags": "#(tag)"
+    }
+    """
+    When method POST
+    And match response == <response>
+
+    Examples:
+    |caso|campo |nombre |name         |price       |response                                                                                                                                                                    |
+    |01  |name  |vacio  |null         |#(price)    |{"statusCode":500,"message":"Internal server error"}                                                                                                                        |
+    |02  |price |null   |"#(product)" |"string"        |{"id":'#number',"name":'#string',"description":'#string',"manufacturer":'#string',"category":'#string',"price":0,"created":'#string',"status":'#string',"tags":'#string'}|
