@@ -61,6 +61,12 @@ The following API endpoints will be tested:
 9. Use `GET` `/order/{id}` to verify the order:
     - Verify that the server response status is 404.
     - Verify the response message.
+
+10. Use `POST` `/catalog/product` to create a new product:
+    - Use an Scenario Outline to test the fields in the body:
+        - "name": null
+        - "price": "string"
+    - Verify the response message.
     
     
 ## Conclusion
