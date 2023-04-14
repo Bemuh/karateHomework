@@ -1,6 +1,6 @@
-Feature: removes a product from the order
+Feature: Removes a product from the order
 
-  Background: valores aleatorios y de entorno
+  Background:
     Given url URL
 
   Scenario:

@@ -1,6 +1,6 @@
 Feature: Get an order from mystoreapi.com
 
-  Background: valores aleatorios y de entorno
+  Background:
     Given url URL
 
   Scenario: get order

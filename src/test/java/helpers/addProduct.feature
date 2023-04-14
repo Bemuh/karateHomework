@@ -1,6 +1,6 @@
 Feature: add a product to an existing order
 
-  Background: valores aleatorios y de entorno
+  Background:
     Given url URL
 
   Scenario:

@@ -1,6 +1,6 @@
-Feature: Crear un producto
+Feature: Create a product in mystoreapi.com
 
-  Background: elementos previos a la ejecución
+  Background: random values and "global" variables
     Given url URL
 
     # Data generators
@@ -15,7 +15,7 @@ Feature: Crear un producto
     # Respuesta esperada
     * def productSuccess = {"id":'#number',"name":'#string',"description":'#string',"manufacturer":'#string',"category":'#string',"price":'#number',"created":'#string',"status":'#string',"tags":'#string'}
 
-  Scenario: 2. Crear un producto
+  Scenario:
 
     Given path '/catalog/product'
     And request

@@ -1,6 +1,6 @@
-Feature: Crear una orden
+Feature: Create an order in mystoreapi.com
 
-  Background: Elementos previos a la solicitud
+  Background: random values and "global" variables
     Given url URL
 
     # Data generators
@@ -12,7 +12,7 @@ Feature: Crear una orden
     * def orderSuccess = {"id": '#number' ,"created": '#string',"customer": '#string',"address": '#string',"status":"open","user":null}
 
 
-  Scenario: 1. Crear una nueva orden, guardar el ID y el customer
+  Scenario:
     Given path order + '/new'
     And request
     """

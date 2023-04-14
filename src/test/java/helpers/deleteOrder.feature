@@ -1,6 +1,6 @@
-Feature: deletes the order previously made
+Feature: Deletes the order previously made
 
-  Background: valores aleatorios y de entorno
+  Background:
     Given url URL
 
   Scenario:
