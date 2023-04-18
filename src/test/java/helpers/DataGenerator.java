@@ -1,6 +1,6 @@
 package helpers;
 
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
 
 public class DataGenerator {
 
@@ -55,7 +55,7 @@ public class DataGenerator {
 
     public static String getRandomTags() {
         Faker faker = new Faker();
-        String tag = faker.commerce().material() + " " + faker.commerce().color();
+        String tag = faker.commerce().material() + " " + faker.commerce().brand();
         return tag;
 
     }
